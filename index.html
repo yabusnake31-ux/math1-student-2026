@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>2026年度 数学Ⅰ — 授業の進め方</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#070710; --text:#f0f0f5; --dim:rgba(240,240,245,.46); --dim2:rgba(240,240,245,.22);
+  --acc:#5dc8c4; --acc-bg:rgba(93,200,196,.10); --acc-bdr:rgba(93,200,196,.24);
+  --sur:rgba(255,255,255,.04); --bdr:rgba(255,255,255,.09);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--text);
+  font-family:'Noto Sans JP',-apple-system,sans-serif;-webkit-font-smoothing:antialiased;}
+
+#bg{position:fixed;inset:0;z-index:0;pointer-events:none;}
+#stage{position:fixed;inset:0;z-index:1;perspective:1000px;perspective-origin:50% 50%;}
+
+/* ── SLIDES ── */
+.slide{
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;justify-content:center;align-items:center;
+  padding:clamp(40px,6vw,72px) clamp(28px,8vw,100px);
+  opacity:0;pointer-events:none;
+  backface-visibility:hidden;will-change:transform,opacity;
+}
+.slide.active{pointer-events:all;z-index:10;}
+
+/* ── TRANSITIONS (4 types, cycling) ── */
+@keyframes D_out {to{opacity:0;transform:scale(.78) translateZ(-320px);}}
+@keyframes D_in  {from{opacity:0;transform:scale(.18) translateZ(-3200px);}to{opacity:1;transform:none;}}
+@keyframes D_outB{to{opacity:0;transform:scale(.18) translateZ(-3200px);}}
+@keyframes D_inB {from{opacity:0;transform:scale(.78) translateZ(-320px);}to{opacity:1;transform:none;}}
+
+@keyframes Y_out {to{opacity:0;transform:rotateY(-82deg) translateX(-12vw) translateZ(-500px);}}
+@keyframes Y_in  {from{opacity:0;transform:rotateY(82deg) translateX(12vw) translateZ(-500px);}to{opacity:1;transform:none;}}
+@keyframes Y_outB{to{opacity:0;transform:rotateY(82deg) translateX(12vw) translateZ(-500px);}}
+@keyframes Y_inB {from{opacity:0;transform:rotateY(-82deg) translateX(-12vw) translateZ(-500px);}to{opacity:1;transform:none;}}
+
+@keyframes X_out {to{opacity:0;transform:translateX(-40vw) rotateY(28deg) translateZ(-400px);}}
+@keyframes X_in  {from{opacity:0;transform:translateX(40vw) rotateY(-28deg) translateZ(-400px);}to{opacity:1;transform:none;}}
+@keyframes X_outB{to{opacity:0;transform:translateX(40vw) rotateY(-28deg) translateZ(-400px);}}
+@keyframes X_inB {from{opacity:0;transform:translateX(-40vw) rotateY(28deg) translateZ(-400px);}to{opacity:1;transform:none;}}
+
+@keyframes O_out {to{opacity:0;transform:translateY(-26vh) scale(.5) translateZ(-1000px);}}
+@keyframes O_in  {from{opacity:0;transform:translateY(26vh) scale(.5) translateZ(-1000px);}to{opacity:1;transform:none;}}
+@keyframes O_outB{to{opacity:0;transform:translateY(26vh) scale(.5) translateZ(-1000px);}}
+@keyframes O_inB {from{opacity:0;transform:translateY(-26vh) scale(.5) translateZ(-1000px);}to{opacity:1;transform:none;}}
+
+/* ── LAYOUT ── */
+.si{max-width:900px;width:100%;display:flex;flex-direction:column;align-items:center;}
+.rule{width:38px;height:1px;background:var(--acc);opacity:.6;margin:0 auto 22px;}
+
+/* ── TYPE ── */
+.ey{font-size:clamp(.58rem,.95vw,.72rem);font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--acc);margin-bottom:16px;}
+.t1{font-size:clamp(2.4rem,6vw,5rem);font-weight:900;line-height:1.08;letter-spacing:-.025em;text-align:center;}
+.t2{font-size:clamp(1.5rem,3.5vw,2.8rem);font-weight:900;line-height:1.12;letter-spacing:-.02em;text-align:center;}
+.sub{font-size:clamp(.78rem,1.3vw,.92rem);font-weight:300;color:var(--dim);letter-spacing:.06em;text-align:center;margin-top:10px;}
+.body{font-size:clamp(.75rem,1.2vw,.86rem);font-weight:300;color:var(--dim);line-height:1.85;}
+.acc{color:var(--acc);} .bold{font-weight:700;} .ctr{text-align:center;}
+
+/* ── GLASS ── */
+.gl{background:var(--sur);border:1px solid var(--bdr);border-radius:16px;padding:22px 20px;
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);}
+.gl-a{border-color:var(--acc-bdr);background:var(--acc-bg);}
+
+/* ── GRIDS ── */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:13px;width:100%;}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:13px;width:100%;}
+@media(max-width:660px){.g3{grid-template-columns:1fr 1fr;}}
+
+/* ── TAG ── */
+.tag{display:inline-block;font-size:.6rem;font-weight:700;letter-spacing:.12em;
+  border:1px solid var(--acc-bdr);color:var(--acc);border-radius:4px;padding:2px 8px;margin-top:10px;}
+
+/* ── BIGNUM ── */
+.bn{font-size:clamp(1.8rem,4vw,3.2rem);font-weight:900;color:var(--acc);line-height:1;margin-bottom:5px;}
+
+/* ── TIMELINE ── */
+.htl{display:flex;width:100%;}
+.htl-col{flex:1;padding-top:16px;border-top:1px solid var(--bdr);position:relative;padding-right:10px;}
+.htl-col::before{content:'';position:absolute;top:-4px;left:0;width:7px;height:7px;border-radius:50%;background:var(--acc);}
+.htl-lbl{font-size:.58rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--acc);margin-bottom:6px;}
+.htl-unit{font-size:clamp(.72rem,1.1vw,.82rem);font-weight:700;color:var(--text);line-height:1.6;}
+.htl-note{font-size:clamp(.65rem,1vw,.74rem);font-weight:300;color:var(--dim);margin-top:4px;}
+
+/* ── NUMLIST ── */
+.nl{display:flex;flex-direction:column;gap:14px;width:100%;max-width:660px;}
+.ni{display:flex;gap:16px;align-items:flex-start;}
+.ni-n{flex-shrink:0;width:38px;height:38px;border-radius:50%;border:1px solid var(--acc-bdr);
+  color:var(--acc);font-size:.85rem;font-weight:700;display:flex;align-items:center;justify-content:center;}
+.ni-b h3{font-size:clamp(.85rem,1.5vw,.98rem);font-weight:700;margin-bottom:4px;}
+.ni-b p{font-size:clamp(.72rem,1.1vw,.82rem);font-weight:300;color:var(--dim);line-height:1.75;}
+
+/* ── TIME BLOCK ── */
+.tb{display:flex;gap:13px;margin-bottom:12px;align-items:flex-start;}
+.tb:last-child{margin-bottom:0;}
+.tb-t{flex-shrink:0;min-width:68px;background:var(--acc-bg);border:1px solid var(--acc-bdr);
+  border-radius:6px;padding:4px 7px;font-size:.58rem;font-weight:700;color:var(--acc);text-align:center;line-height:1.45;}
+.tb-b{font-size:clamp(.72rem,1.1vw,.82rem);font-weight:300;color:var(--dim);line-height:1.75;}
+.tb-b strong{color:var(--text);font-weight:700;}
+
+/* ── MATERIAL ROW ── */
+.mr{display:flex;gap:12px;align-items:flex-start;padding:12px 0;border-bottom:1px solid var(--bdr);}
+.mr:last-child{border-bottom:none;}
+.mr-n{flex-shrink:0;width:108px;font-size:clamp(.72rem,1.1vw,.82rem);font-weight:700;color:var(--text);}
+.mr-b{font-size:clamp(.7rem,1.05vw,.8rem);font-weight:300;color:var(--dim);line-height:1.75;}
+
+/* ── SCORE ROW ── */
+.sr{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--bdr);}
+.sr:last-child{border-bottom:none;}
+.sr-l{font-size:clamp(.72rem,1.1vw,.82rem);font-weight:300;color:var(--dim);}
+.sr-v{font-size:clamp(.95rem,1.8vw,1.3rem);font-weight:900;color:var(--acc);}
+
+/* ── ROAD ── */
+.rd{display:flex;flex-direction:column;width:100%;max-width:760px;}
+.rd-row{display:flex;gap:0;}
+.rd-yr{flex-shrink:0;width:82px;padding:12px 12px 12px 0;border-right:1px solid var(--bdr);text-align:right;}
+.rd-yr-lbl{font-size:.56rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--acc);}
+.rd-yr-n{font-size:1.1rem;font-weight:900;}
+.rd-c{flex:1;padding:12px 0 12px 16px;border-bottom:1px solid rgba(255,255,255,.04);}
+.rd-c h3{font-size:clamp(.78rem,1.25vw,.9rem);font-weight:700;margin-bottom:4px;}
+.rd-c p{font-size:clamp(.68rem,1.05vw,.78rem);font-weight:300;color:var(--dim);line-height:1.7;}
+
+/* ── HINT ── */
+.hint{position:absolute;bottom:clamp(22px,3.2vh,38px);left:50%;transform:translateX(-50%);
+  display:flex;align-items:center;gap:10px;font-size:.66rem;font-weight:300;color:var(--dim);
+  letter-spacing:.14em;white-space:nowrap;animation:hPulse 2.8s ease-in-out infinite;}
+.hint-a{width:20px;height:1px;background:var(--acc);position:relative;}
+.hint-a::after{content:'';position:absolute;right:0;top:-3px;width:6px;height:6px;
+  border-right:1px solid var(--acc);border-top:1px solid var(--acc);transform:rotate(45deg);}
+@keyframes hPulse{0%,100%{opacity:.3;transform:translateX(-50%) translateX(0);}50%{opacity:.8;transform:translateX(-50%) translateX(5px);}}
+
+/* ── NAV ── */
+#nav{position:fixed;bottom:clamp(16px,2.5vh,30px);left:50%;transform:translateX(-50%);
+  z-index:100;display:flex;align-items:center;gap:15px;}
+.nb{width:40px;height:40px;background:rgba(255,255,255,.05);border:1px solid var(--bdr);border-radius:50%;
+  color:var(--text);font-size:1.1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:background .18s,border-color .18s;}
+.nb:hover:not(:disabled){background:rgba(255,255,255,.10);border-color:rgba(255,255,255,.18);}
+.nb:disabled{opacity:.14;cursor:default;}
+#dots{display:flex;gap:6px;flex-wrap:wrap;max-width:220px;justify-content:center;}
+.dot{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.18);
+  transition:background .3s,transform .3s;cursor:pointer;}
+.dot.on{background:var(--acc);transform:scale(1.6);}
+#ctr{position:fixed;top:clamp(18px,2.4vh,28px);right:clamp(20px,2.5vw,38px);z-index:100;
+  font-size:.63rem;font-weight:700;letter-spacing:.18em;color:var(--dim2);}
+#sec{position:fixed;top:clamp(18px,2.4vh,28px);left:clamp(20px,2.5vw,38px);z-index:100;
+  font-size:.6rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:rgba(93,200,196,.42);transition:opacity .4s;}
+</style>
+</head>
+<body>
+<canvas id="bg"></canvas>
+<div id="stage">
+
+<!-- 01 TITLE -->
+<section class="slide" data-i="0" data-s="">
+<div class="si ctr">
+  <p class="ey">2026年度 · 数学Ⅰ</p>
+  <div class="rule"></div>
+  <h1 class="t1" style="margin-bottom:24px;">この1年が、<br>あなたの数学を<br>変える。</h1>
+  <p class="sub">授業の進め方 · シラバス · 課題のイメージ</p>
+  <div class="hint"><div class="hint-a"></div>キーボードまたはボタンで進む</div>
+</div>
+</section>
+
+<!-- 02 偽の理解 -->
+<section class="slide" data-i="1" data-s="テーマ">
+<div class="si">
+  <p class="ey">この授業の核心</p>
+  <h2 class="t2" style="margin-bottom:32px;">「わかった」と「<span class="acc">解ける</span>」はちがう。</h2>
+  <div class="g2" style="max-width:660px;width:100%;margin-bottom:22px;">
+    <div class="gl">
+      <p style="font-size:.62rem;font-weight:700;letter-spacing:.16em;color:var(--dim);text-transform:uppercase;margin-bottom:10px;">わかった気</p>
+      <p class="body">説明を聞いてうなずける<br>解答を見て「なるほど」と思う<br>でも、本番で手が止まる</p>
+    </div>
+    <div class="gl gl-a">
+      <p style="font-size:.62rem;font-weight:700;letter-spacing:.16em;color:var(--acc);text-transform:uppercase;margin-bottom:10px;">本当に解ける</p>
+      <p class="body" style="color:var(--text);">白紙に、自分の言葉で書ける<br>何も見ずに最初から再現できる<br>変形・組み合わせ問題にも対応できる</p>
+    </div>
+  </div>
+  <p class="body ctr" style="color:var(--text);">答えを覚えるのではなく、<span class="bold">本質を理解する</span>こと。<br>少し変えた問題にも解けて、初めて理解したと言える。</p>
+</div>
+</section>
+
+<!-- 03 3つのゴール -->
+<section class="slide" data-i="2" data-s="テーマ">
+<div class="si">
+  <p class="ey">この1年の目標</p>
+  <h2 class="t2" style="margin-bottom:32px;">3つのゴール</h2>
+  <div class="nl">
+    <div class="ni">
+      <div class="ni-n">01</div>
+      <div class="ni-b">
+        <h3>Focus Gold レベルの基礎事項を完璧にする</h3>
+        <p>★1〜4 の問題を自力で最初から解き切れる状態を目指す。<br>定期考査・小テスト・単元テストで積み上げていく。</p>
+      </div>
+    </div>
+    <div class="ni">
+      <div class="ni-n">02</div>
+      <div class="ni-b">
+        <h3>思考力・発想力を育てる</h3>
+        <p>初見の問題・入試問題に立ち向かえる「考え方の引き出し」を作る。<br>解法暗記ではなく、問題を構造的に捉える力を磨く。</p>
+      </div>
+    </div>
+    <div class="ni">
+      <div class="ni-n">03</div>
+      <div class="ni-b">
+        <h3>数学ⅠA・ⅡB・ベクトルを履修完了 ＋ 入試演習の入口まで</h3>
+        <p>高1終了時点で高校数学の主要内容を一通り学び終え、<br>入試問題に少し触れる段階まで到達する。</p>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- 04 シラバス -->
+<section class="slide" data-i="3" data-s="シラバス">
+<div class="si">
+  <p class="ey">年間シラバス</p>
+  <h2 class="t2" style="margin-bottom:32px;">1年間の流れ</h2>
+  <div class="htl" style="max-width:860px;width:100%;margin-bottom:22px;">
+    <div class="htl-col">
+      <p class="htl-lbl">1学期・中間</p>
+      <p class="htl-unit">軌跡と領域</p>
+      <p class="htl-note">完了</p>
+    </div>
+    <div class="htl-col">
+      <p class="htl-lbl">1学期・期末</p>
+      <p class="htl-unit">三角関数<br>指数・対数</p>
+      <p class="htl-note">完了が目標</p>
+    </div>
+    <div class="htl-col">
+      <p class="htl-lbl">2学期・中間</p>
+      <p class="htl-unit">数列</p>
+      <p class="htl-note">完了 → 微分へ</p>
+    </div>
+    <div class="htl-col">
+      <p class="htl-lbl">2学期・期末</p>
+      <p class="htl-unit">微分・積分</p>
+      <p class="htl-note">完了が目標</p>
+    </div>
+    <div class="htl-col" style="padding-right:0;">
+      <p class="htl-lbl">3学期</p>
+      <p class="htl-unit">積分 完了<br>＋ 入試演習</p>
+      <p class="htl-note">仕上げ</p>
+    </div>
+  </div>
+  <div class="gl" style="width:100%;max-width:680px;">
+    <p class="body">単元の区切りごとに <span class="acc bold">単元確認テスト（型 C）</span> を実施します。<br>長期休暇中は FG・4STEP の残りや、指定の入試問題に取り組んでもらいます。</p>
+  </div>
+</div>
+</section>
+
+<!-- 05 長期休暇 -->
+<section class="slide" data-i="4" data-s="シラバス">
+<div class="si">
+  <p class="ey">長期休暇の課題</p>
+  <h2 class="t2" style="margin-bottom:28px;">休暇中にやること</h2>
+  <div class="gl" style="width:100%;max-width:660px;margin-bottom:14px;">
+    <div class="mr">
+      <div class="mr-n" style="width:96px;">FG・4STEP</div>
+      <div class="mr-b">授業で扱いきれなかった範囲の残りを進める。<br>量・範囲は都度指示する。</div>
+    </div>
+    <div class="mr">
+      <div class="mr-n" style="width:96px;">指定問題</div>
+      <div class="mr-b">こちらから入試問題などを指定する可能性がある。<br>解けなくてもまず取り組むこと。</div>
+    </div>
+    <div class="mr">
+      <div class="mr-n" style="width:96px;">自主問題集</div>
+      <div class="mr-b">一対一対応の数学など、各自で取り組む問題集。<br>自走できる人はどんどん進めよう。詳細は後述。</div>
+    </div>
+  </div>
+  <p class="body ctr" style="color:var(--dim2);font-size:.7rem;">詳細は各休暇前に案内します。</p>
+</div>
+</section>
+
+<!-- 06 授業の型 概要 -->
+<section class="slide" data-i="5" data-s="授業の型">
+<div class="si">
+  <p class="ey">授業の構造</p>
+  <h2 class="t2" style="margin-bottom:10px;">3つの型で積み上げる</h2>
+  <p class="sub" style="margin-bottom:30px;">スパイラル学習：基礎 → 演習 → テスト → 次の単元へ</p>
+  <div class="g3" style="max-width:800px;width:100%;">
+    <div class="gl" style="text-align:center;">
+      <p class="bn">A</p>
+      <p class="bold" style="font-size:.95rem;margin-bottom:8px;">基礎演習型</p>
+      <p class="body">確認テスト・FG 演習・<br>アドバンスト解説が中心。</p>
+      <span class="tag">基本 · 週 2〜3 回</span>
+    </div>
+    <div class="gl" style="text-align:center;">
+      <p class="bn">B</p>
+      <p class="bold" style="font-size:.95rem;margin-bottom:8px;">思考力型</p>
+      <p class="body">入試レベルの思考力問題演習と解説。切り口・発想力を鍛える。</p>
+      <span class="tag">ときどき</span>
+    </div>
+    <div class="gl gl-a" style="text-align:center;">
+      <p class="bn">C</p>
+      <p class="bold acc" style="font-size:.95rem;margin-bottom:8px;">単元確認テスト型</p>
+      <p class="body">単元ごとに実施。基礎から思考力まで 100点満点。</p>
+      <span class="tag">単元末</span>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- 07 A の日 -->
+<section class="slide" data-i="6" data-s="授業の型">
+<div class="si">
+  <p class="ey">授業の型 — A</p>
+  <h2 class="t2" style="margin-bottom:8px;"><span class="acc">A の日</span>　基礎演習型</h2>
+  <p class="sub" style="margin-bottom:26px;">「見ないで解く」が核心。FG と アドバンストで基礎を固める。</p>
+  <div class="gl" style="width:100%;max-width:660px;margin-bottom:12px;">
+    <div class="tb">
+      <div class="tb-t">10〜15分<br>確認テスト</div>
+      <div class="tb-b"><strong>FG ★1〜2 レベルの確認テスト</strong><br>前回の内容が定着しているか確認。毎回行う。</div>
+    </div>
+    <div class="tb">
+      <div class="tb-t">15〜20分<br>FG 演習</div>
+      <div class="tb-b"><strong>FG ★3〜4 の演習（完成ノート使用）</strong><br>解答を見ずに自力で解く。終わったら自己採点・確認。</div>
+    </div>
+    <div class="tb">
+      <div class="tb-t">10〜15分<br>解説・添削</div>
+      <div class="tb-b"><strong>アドバンスト練習問題の解説・添削</strong>（予習必須）<br>板書またはプロジェクターで確認。FG の一部解説も行う。</div>
+    </div>
+  </div>
+  <div class="gl gl-a" style="width:100%;max-width:660px;">
+    <p class="body"><span class="acc bold">予習のルール：</span>アドバンストの練習問題は前日までに解いてくること。授業は解説と添削の場。</p>
+  </div>
+</div>
+</section>
+
+<!-- 08 B の日 -->
+<section class="slide" data-i="7" data-s="授業の型">
+<div class="si">
+  <p class="ey">授業の型 — B</p>
+  <h2 class="t2" style="margin-bottom:8px;"><span class="acc">B の日</span>　思考力型</h2>
+  <p class="sub" style="margin-bottom:26px;">切り口・発想・思考プロセスを磨く。正解よりも「考え方」が主役。</p>
+  <div class="g2" style="max-width:660px;width:100%;margin-bottom:12px;">
+    <div class="gl">
+      <div class="tb-t" style="margin-bottom:12px;display:inline-block;">25 分 · 演習</div>
+      <p class="bold" style="margin-bottom:6px;">思考力問題演習（2問程度）</p>
+      <p class="body">入試レベルの問題に、まず自分で向き合う。手が止まっても考え続けることが大切。</p>
+    </div>
+    <div class="gl">
+      <div class="tb-t" style="margin-bottom:12px;display:inline-block;">20 分 · 解説</div>
+      <p class="bold" style="margin-bottom:6px;">解説・アプローチの整理</p>
+      <p class="body">「どこに着目するか」「どう展開するか」を丁寧に解説。答えよりプロセスを重視する。</p>
+    </div>
+  </div>
+  <div class="gl gl-a" style="width:100%;max-width:660px;">
+    <p class="body"><span class="acc bold">または：</span>研究的な内容で深める授業（数学の面白さを体感する時間）を行うこともある。</p>
+  </div>
+</div>
+</section>
+
+<!-- 09 C の日 -->
+<section class="slide" data-i="8" data-s="授業の型">
+<div class="si">
+  <p class="ey">授業の型 — C</p>
+  <h2 class="t2" style="margin-bottom:8px;"><span class="acc">C の日</span>　単元確認テスト</h2>
+  <p class="sub" style="margin-bottom:26px;">単元が終わるたびに実施。基礎から思考力まで 100 点で問う。</p>
+  <div class="g2" style="max-width:660px;width:100%;">
+    <div class="gl">
+      <div style="display:flex;align-items:center;gap:16px;padding-bottom:16px;border-bottom:1px solid var(--bdr);">
+        <span style="flex-shrink:0;font-size:clamp(1.6rem,3vw,2.2rem);font-weight:900;color:var(--acc);line-height:1;">50点</span>
+        <div>
+          <p style="font-size:clamp(.75rem,1.2vw,.86rem);font-weight:700;color:var(--text);">基礎・演習レベル（FG ★1〜4）</p>
+          <p style="font-size:.62rem;color:var(--dim);margin-top:4px;">※ アクティブリコール（白紙再現演習）を含む場合あり</p>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:16px;padding-top:16px;">
+        <span style="flex-shrink:0;font-size:clamp(1.6rem,3vw,2.2rem);font-weight:900;color:var(--acc);line-height:1;">40点</span>
+        <div>
+          <p style="font-size:clamp(.75rem,1.2vw,.86rem);font-weight:700;color:var(--text);">思考力レベル（B レベル問題）</p>
+        </div>
+      </div>
+    </div>
+    <div class="gl">
+      <p class="bold" style="margin-bottom:10px;">再テストについて</p>
+      <p class="body">A問題で6〜7割を下回った場合、再テストを提出してもらいます。<br><br>再テストに向けて：<br>· 間違えた問題を解き直す<br>· 答案を白紙で再現してみる<br>· 必要なら質問・面談</p>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- 10 テストの種類 -->
+<section class="slide" data-i="9" data-s="テスト">
+<div class="si">
+  <p class="ey">評価の仕組み</p>
+  <h2 class="t2" style="margin-bottom:30px;">テストの種類</h2>
+  <div class="g3" style="max-width:800px;width:100%;">
+    <div class="gl">
+      <p class="bold" style="margin-bottom:8px;">確認テスト（A・C の日）</p>
+      <p class="body">A の日：毎授業冒頭 10〜15 分、FG ★1〜2 レベルで前回の定着確認。<br>C の日：単元末に 100 点満点の単元確認テストを実施。</p>
+    </div>
+    <div class="gl gl-a">
+      <p class="bold acc" style="margin-bottom:8px;">小テスト</p>
+      <p class="body">数Ⅰと数Ⅱで交互に実施。<br>数Ⅰは約 <span class="acc bold">2週間に1回</span>。</p>
+      <p class="body" style="margin-top:10px;color:var(--text);font-weight:700;">⚠ 45 分（中学と違う！）</p>
+      <p class="body">考査レベル。気を抜かないこと。<br>考査前は実施しない予定。</p>
+    </div>
+    <div class="gl">
+      <p class="bold" style="margin-bottom:8px;">中間・期末考査</p>
+      <p class="body">50 分（中学と同じ）。<br><br>直近の内容だけでなく、<span class="bold" style="color:var(--text);">少し前の内容も出題</span>する（スパイラル学習）。</p>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- 11 追試・振り返り -->
+<section class="slide" data-i="10" data-s="テスト">
+<div class="si">
+  <p class="ey">追試・振り返り</p>
+  <h2 class="t2" style="margin-bottom:30px;">できなかった問題と<br>向き合う</h2>
+  <div class="g2" style="max-width:700px;width:100%;">
+    <div class="gl">
+      <p class="bold" style="margin-bottom:10px;">追試の仕組み</p>
+      <p class="body">単元テスト・小テスト・考査のいずれも、点数が足りない場合は <span class="acc bold">追試（再提出）</span> を用意する予定。<br><br>「できなかった状態で終わらせない」のがルール。</p>
+    </div>
+    <div class="gl gl-a">
+      <p class="bold acc" style="margin-bottom:4px;">テスト後の振り返り</p>
+      <p style="font-size:.65rem;color:var(--acc);margin-bottom:10px;letter-spacing:.04em;">— 直しレポートの作成</p>
+      <p class="body">テスト返却後、全員に <span class="bold" style="color:var(--text);">反省＋答案再現</span> に取り組んでもらいます。<br><br>· なぜ間違えたか言語化する<br>· 問題をもう一度最初から解く<br>· 白紙に再現できるまで繰り返す</p>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- 12 教材マップ -->
+<section class="slide" data-i="11" data-s="教材">
+<div class="si">
+  <p class="ey">教材の使い方</p>
+  <h2 class="t2" style="margin-bottom:28px;">教材の全体マップ</h2>
+  <div class="gl" style="width:100%;max-width:760px;">
+    <div class="mr">
+      <div class="mr-n">検定教科書</div>
+      <div class="mr-b">概念理解の入口。ざっと読んで練習問題に手を動かす。<br>Classroom 経由で <span class="acc">NotebookLM</span> に接続予定（わからない部分を AI に質問できる）。</div>
+    </div>
+    <div class="mr">
+      <div class="mr-n">アドバンスト</div>
+      <div class="mr-b"><span class="acc bold">予習してきて授業で解説</span>。練習問題を前日までに解いてくること。授業のメイン教材。</div>
+    </div>
+    <div class="mr">
+      <div class="mr-n">4STEP</div>
+      <div class="mr-b">指示があるまでやらなくて OK。長期休暇課題として使う場合がある。</div>
+    </div>
+    <div class="mr">
+      <div class="mr-n">Focus Gold</div>
+      <div class="mr-b"><span class="acc bold">完成ノートを毎授業持参</span>。テスト・考査の出題元。<br>★1〜2 は課題として出す予定。★3〜4 は授業演習。</div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- 13 Focus Gold -->
+<section class="slide" data-i="12" data-s="教材">
+<div class="si">
+  <p class="ey">教材 — Focus Gold</p>
+  <h2 class="t2" style="margin-bottom:28px;"><span class="acc">Focus Gold</span> の使い方</h2>
+  <div class="g2" style="max-width:700px;width:100%;margin-bottom:12px;">
+    <div class="gl">
+      <p class="bold" style="margin-bottom:8px;">★1〜2　基礎レベル</p>
+      <p class="body">週末課題として出す予定。<br>自分のペースで確実に進める。<br>授業前日までに済ませておく。</p>
+      <span class="tag">課題 · 週末</span>
+    </div>
+    <div class="gl gl-a">
+      <p class="bold acc" style="margin-bottom:8px;">★3〜4　標準〜応用</p>
+      <p class="body">授業中に「見ないで解く」演習として行う。<br>完成ノートを使い、解法を自力で再現する。</p>
+      <span class="tag">授業演習</span>
+    </div>
+  </div>
+  <div class="gl" style="width:100%;max-width:700px;">
+    <p class="body"><span class="acc bold">完成ノートについて：</span>毎授業必ず持参すること。テスト・考査・単元テストの出題元になる。<br>FG の定着度がそのまま定期考査の点数に直結します。</p>
+  </div>
+</div>
+</section>
+
+<!-- 14 一対一対応 -->
+<section class="slide" data-i="13" data-s="教材">
+<div class="si">
+  <p class="ey">教材 — 自主学習</p>
+  <h2 class="t2" style="margin-bottom:8px;"><span class="acc">一対一対応の数学</span>（東京出版）</h2>
+  <p class="sub" style="margin-bottom:26px;">FG の次のステップ。各自で購入して自走することを強く勧める。</p>
+  <div class="g2" style="max-width:700px;width:100%;">
+    <div class="gl">
+      <p class="bold" style="margin-bottom:10px;font-size:.95rem;">文系の人</p>
+      <p class="body">今年中に 1A を始めて、<br><span class="acc bold">来年の夏くらいまでに 1A・2B 完了</span> が目標。<br>ゆっくりめのペースでOK。<br>まず FG を固めてから。<br><br>完了後 → 理系プラチカ or 文系プラチカへ</p>
+    </div>
+    <div class="gl gl-a">
+      <p class="bold acc" style="margin-bottom:10px;font-size:.95rem;">理系の人</p>
+      <p class="body"><span class="acc bold">今年中に 1A・2B</span> を完了が目標。<br><span class="bold" style="color:var(--text);">来年の夏までには絶対に</span> 終わらせる。<br><br>遅くとも高2・12月までに数学を完成させること。<br><br>理由 → 高2末から理科2科目が始まる。</p>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- 15 AI ツール -->
+<section class="slide" data-i="14" data-s="AI 活用">
+<div class="si">
+  <p class="ey">AI ツール活用</p>
+  <h2 class="t2" style="margin-bottom:28px;">AI を使い倒せ</h2>
+  <div class="g2" style="max-width:700px;width:100%;margin-bottom:12px;">
+    <div class="gl">
+      <p class="bold" style="margin-bottom:8px;">NotebookLM</p>
+      <p class="body">教科書・Focus Gold の内容に関する不明点を質問できる。<br>Classroom でリンクを配信予定。<br>基礎的な概念の説明に有効。</p>
+      <span class="tag">概念理解 · 基礎の質問</span>
+    </div>
+    <div class="gl gl-a">
+      <p class="bold acc" style="margin-bottom:8px;">Google AI Studio（Gemini）</p>
+      <p class="body">答案の添削・類題作成・入試問題の解説に。初回ガイダンスを行う予定。<br>難しい問題・応用的な使い方にはこちらが有効。</p>
+      <span class="tag">答案添削 · 発展問題</span>
+    </div>
+  </div>
+  <div class="gl" style="width:100%;max-width:700px;">
+    <p class="body">使い方は全部教えてもらうのではなく、<span class="acc bold">自分で遊びながら工夫していく</span>こと。<br>AI を使いこなせる人ほど、勉強の質と効率が上がる。まず試してみよう。</p>
+  </div>
+</div>
+</section>
+
+<!-- 16 課題サイクル -->
+<section class="slide" data-i="15" data-s="課題">
+<div class="si">
+  <p class="ey">毎週の流れ</p>
+  <h2 class="t2" style="margin-bottom:28px;">日々の課題サイクル</h2>
+  <div class="gl" style="width:100%;max-width:720px;">
+    <div class="mr">
+      <div class="mr-n">A の日の前</div>
+      <div class="mr-b"><span class="acc bold">アドバンストの練習問題を予習</span>してくること。<br>教科書をざっと読んで内容を把握しておく。</div>
+    </div>
+    <div class="mr">
+      <div class="mr-n">週末</div>
+      <div class="mr-b"><span class="bold" style="color:var(--text);">FG ★1〜2 の指定範囲、FG例題など</span>を進める。量は都度指示。<br>できる範囲で １対１対応の数学なども進める。</div>
+    </div>
+    <div class="mr">
+      <div class="mr-n">B・C の日</div>
+      <div class="mr-b">特別な予習は基本的に不要。<br>ただし、これまでの復習・再テストの準備は各自でしっかりと。</div>
+    </div>
+    <div class="mr">
+      <div class="mr-n">長期休暇</div>
+      <div class="mr-b">FG / 4STEP の残り、指定入試問題、または一対一対応（任意）。<br>詳細は休暇前に案内する。</div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- 17 文系3年間 -->
+<section class="slide" data-i="16" data-s="ロードマップ">
+<div class="si">
+  <p class="ey">3年間のロードマップ — 文系</p>
+  <h2 class="t2" style="margin-bottom:26px;">文系の3年間</h2>
+  <div class="rd" style="margin-bottom:16px;">
+    <div class="rd-row">
+      <div class="rd-yr"><p class="rd-yr-lbl">高1</p><p class="rd-yr-n">今年</p></div>
+      <div class="rd-c">
+        <h3>数学ⅠA・ⅡB ほぼ履修完了 ＋ FG を固める</h3>
+        <p>余裕があれば 『一対一対応の数学』 を始めておく。FG ★1〜4 を自力で解ける状態にする。</p>
+      </div>
+    </div>
+    <div class="rd-row">
+      <div class="rd-yr"><p class="rd-yr-lbl">高2</p><p class="rd-yr-n">来年</p></div>
+      <div class="rd-c">
+        <h3>一対一 1A・2B 完了 → 6〜7月から入試演習開始</h3>
+        <p>理系プラチカ または文系プラチカへ。東大・京大圧勝を目指すなら早めに。</p>
+      </div>
+    </div>
+    <div class="rd-row">
+      <div class="rd-yr"><p class="rd-yr-lbl">高3</p><p class="rd-yr-n">再来年</p></div>
+      <div class="rd-c">
+        <h3>入試問題の実践演習・過去問</h3>
+        <p>標準 → 発展 → 実戦演習。<span class="acc">最低ライン：FG 完璧 → 京都大学文系で戦える。</span></p>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- 18 理系3年間 -->
+<section class="slide" data-i="17" data-s="ロードマップ">
+<div class="si">
+  <p class="ey">3年間のロードマップ — 理系</p>
+  <h2 class="t2" style="margin-bottom:6px;">理系の3年間</h2>
+  <p class="sub" style="margin-bottom:20px;">— タイムラインがタイトです。覚悟して取り組もう。</p>
+  <div class="rd" style="margin-bottom:14px;">
+    <div class="rd-row">
+      <div class="rd-yr"><p class="rd-yr-lbl">高1</p><p class="rd-yr-n">今年</p></div>
+      <div class="rd-c">
+        <h3>ⅠA・ⅡB 履修 ＋ 一対一 1A・2B を今年中に完了が目標</h3>
+        <p>FG ★1〜4 を定着させながら、一対一も並走して進めることが望ましい。終わればベスト。</p>
+      </div>
+    </div>
+    <div class="rd-row">
+      <div class="rd-yr"><p class="rd-yr-lbl">高2</p><p class="rd-yr-n">来年</p></div>
+      <div class="rd-c">
+        <h3>数学Ⅲ完了 → <span class="acc">高2・12月に数学を完成させる</span></h3>
+        <p>遅くとも夏までに一対一 1A・2B が絶対終わっていること。その後 数学Ⅲ へ。<br>FGも予定がタイト。高2末から理科2科目を本格化させるため、冬には数学を完成させたい。</p>
+      </div>
+    </div>
+    <div class="rd-row">
+      <div class="rd-yr"><p class="rd-yr-lbl">高3</p><p class="rd-yr-n">再来年</p></div>
+      <div class="rd-c">
+        <h3>入試実践演習（数学 ＋ 理科2科目）</h3>
+        <p>数学は仕上げ段階。医学部志望は高難度問題集まで対応必須。<br><span class="acc">数学を高3に残すと、ほぼ間に合わない。</span></p>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- 19 面談・相談 -->
+<section class="slide" data-i="18" data-s="">
+<div class="si">
+  <p class="ey">サポート体制</p>
+  <h2 class="t2" style="margin-bottom:12px;">困ったら、<br>どんどん相談して。</h2>
+  <p class="sub" style="margin-bottom:28px;">個別面談・追加プログラムも計画中。</p>
+  <div class="g3" style="max-width:760px;width:100%;margin-bottom:12px;">
+    <div class="gl">
+      <p class="bold" style="margin-bottom:7px;">数学が苦手・伸び悩んでいる</p>
+      <p class="body">どこで詰まっているかを一緒に特定して、立て直し方を考えます。</p>
+    </div>
+    <div class="gl gl-a">
+      <p class="bold acc" style="margin-bottom:7px;">医学部志望だが数学が不安</p>
+      <p class="body">必要なレベルと今の差を明確にして、戦略を一緒に立てましょう。</p>
+    </div>
+    <div class="gl">
+      <p class="bold" style="margin-bottom:7px;">もっともっと伸ばしたい</p>
+      <p class="body">より高いレベルの問題・参考書について相談に来てください。</p>
+    </div>
+  </div>
+  <div class="gl" style="width:100%;max-width:760px;">
+    <p class="body ctr">具体的なプログラムについては <span class="acc bold">また追って説明します</span>。いつでも声をかけてください。</p>
+  </div>
+</div>
+</section>
+
+<!-- 20 心構え -->
+<section class="slide" data-i="19" data-s="">
+<div class="si">
+  <p class="ey">心構え</p>
+  <h2 class="t2" style="margin-bottom:32px;">この授業の <span class="acc">2つのルール</span></h2>
+  <div class="nl">
+    <div class="ni">
+      <div class="ni-n">01</div>
+      <div class="ni-b">
+        <h3>FG レベルを完璧にする</h3>
+        <p>★1〜4 の問題を、自分の言葉で、最初から解ける状態にする。<br>問題を解いた後、もう一度白紙に書けるか確認すること。</p>
+      </div>
+    </div>
+    <div class="ni">
+      <div class="ni-n">02</div>
+      <div class="ni-b">
+        <h3>偽の理解を徹底的に防ぐ</h3>
+        <p>解答を見て「わかった」で終わらせない。<br>解法を少し変えた問題・組み合わせた問題にも対応できること。<br>本質的な理解なくして、入試で戦える数学は身につかない。</p>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- 21 スタート -->
+<section class="slide" data-i="20" data-s="">
+<div class="si ctr">
+  <p class="ey">2026年度 · 数学Ⅰ</p>
+  <div class="rule"></div>
+  <h1 class="t1" style="margin-bottom:20px;">さあ、始めよう。</h1>
+  <p class="sub">FG を開いて、アドバンストを予習して、問題と向き合おう。</p>
+</div>
+</section>
+
+</div><!-- #stage -->
+
+<div id="nav">
+  <button class="nb" id="btnP" disabled>&#8249;</button>
+  <div id="dots"></div>
+  <button class="nb" id="btnN">&#8250;</button>
+</div>
+<div id="ctr">01 / 21</div>
+<div id="sec"></div>
+
+<script>
+/* ══════════════════════════════════
+   CONSTELLATION BACKGROUND
+══════════════════════════════════ */
+(function(){
+  const cv = document.getElementById('bg');
+  const cx = cv.getContext('2d');
+  let W, H, stars=[], edges=[], shooters=[], gAngle=0, nextShoot=9000;
+  const mouse={x:-1,y:-1};
+
+  function build(){
+    W=cv.width=innerWidth; H=cv.height=innerHeight;
+    const N=Math.min(260,Math.max(80,Math.floor(W*H/7000)));
+    // spread 20% beyond canvas so rotation doesn't show empty corners
+    stars=Array.from({length:N},()=>({
+      x:(Math.random()-.1)*W*1.2, y:(Math.random()-.1)*H*1.2,
+      r:Math.pow(Math.random(),2.8)*2.2+.3,
+      bo:Math.random()*.55+.12,
+      ts:Math.random()*.012+.003,
+      tp:Math.random()*Math.PI*2,
+      cy:Math.random()<.06,
+    }));
+    // constellation edges: limited connections per star
+    edges=[];
+    const DMAX=Math.min(W,H)*.17;
+    const conn=new Array(N).fill(0);
+    for(let i=0;i<N-1;i++){
+      if(conn[i]>=3)continue;
+      for(let j=i+1;j<N;j++){
+        if(conn[j]>=3)continue;
+        const dx=stars[i].x-stars[j].x, dy=stars[i].y-stars[j].y;
+        const d=Math.sqrt(dx*dx+dy*dy);
+        if(d>50&&d<DMAX){edges.push([i,j,d/DMAX]);conn[i]++;conn[j]++;if(conn[i]>=3)break;}
+      }
+    }
+  }
+
+  function draw(t){
+    cx.clearRect(0,0,W,H);
+    const px=mouse.x<0?0:(mouse.x/W-.5)*18;
+    const py=mouse.y<0?0:(mouse.y/H-.5)*14;
+
+    cx.save();
+    cx.translate(W/2+px, H/2+py);
+    cx.rotate(gAngle);
+    cx.translate(-W/2,-H/2);
+
+    // lines
+    cx.lineWidth=.5;
+    for(const [i,j,r] of edges){
+      cx.strokeStyle=`rgba(180,200,255,${(1-r)*.07})`;
+      cx.beginPath();cx.moveTo(stars[i].x,stars[i].y);cx.lineTo(stars[j].x,stars[j].y);cx.stroke();
+    }
+
+    // stars
+    const ts=t*.001;
+    for(const s of stars){
+      const opa=Math.max(.04, s.bo+Math.sin(ts*s.ts*60+s.tp)*.2);
+      const rgb=s.cy?'93,200,196':'210,215,255';
+      if(s.r>1.4){
+        const gr=cx.createRadialGradient(s.x,s.y,0,s.x,s.y,s.r*4.5);
+        gr.addColorStop(0,`rgba(${rgb},${opa})`);
+        gr.addColorStop(.35,`rgba(${rgb},${opa*.35})`);
+        gr.addColorStop(1,'rgba(0,0,0,0)');
+        cx.beginPath();cx.arc(s.x,s.y,s.r*4.5,0,6.283);cx.fillStyle=gr;cx.fill();
+      }
+      cx.beginPath();cx.arc(s.x,s.y,s.r,0,6.283);cx.fillStyle=`rgba(${rgb},${opa})`;cx.fill();
+    }
+    cx.restore();
+
+    // shooting star
+    if(t>nextShoot){
+      nextShoot=t+8000+Math.random()*9000;
+      const ang=.18+Math.random()*.32;
+      const sp=9+Math.random()*7;
+      shooters.push({x:Math.random()*W*.75+W*.05,y:Math.random()*H*.2,
+        vx:Math.cos(ang)*sp,vy:Math.sin(ang)*sp,life:1,len:75+Math.random()*55});
+    }
+    shooters=shooters.filter(s=>s.life>0);
+    for(const s of shooters){
+      const ang=Math.atan2(s.vy,s.vx);
+      const tx=s.x-Math.cos(ang)*s.len, ty=s.y-Math.sin(ang)*s.len;
+      const gr=cx.createLinearGradient(s.x,s.y,tx,ty);
+      gr.addColorStop(0,`rgba(255,255,255,${s.life*.85})`);
+      gr.addColorStop(1,'rgba(255,255,255,0)');
+      cx.save();cx.strokeStyle=gr;cx.lineWidth=1.4;
+      cx.beginPath();cx.moveTo(s.x,s.y);cx.lineTo(tx,ty);cx.stroke();cx.restore();
+      s.x+=s.vx;s.y+=s.vy;s.life-=.022;
+    }
+
+    gAngle+=.000038;
+    requestAnimationFrame(draw);
+  }
+
+  window.addEventListener('mousemove',e=>{mouse.x=e.clientX;mouse.y=e.clientY;});
+  window.addEventListener('resize',()=>{clearTimeout(window._rt);window._rt=setTimeout(build,200);});
+  build();
+  requestAnimationFrame(draw);
+})();
+
+/* ══════════════════════════════════
+   SLIDE ENGINE
+══════════════════════════════════ */
+(function(){
+  const slides=Array.from(document.querySelectorAll('.slide'));
+  const dotsEl=document.getElementById('dots');
+  const ctrEl=document.getElementById('ctr');
+  const secEl=document.getElementById('sec');
+  const btnP=document.getElementById('btnP');
+  const btnN=document.getElementById('btnN');
+  const N=slides.length;
+  let cur=0, busy=false;
+
+  // Build dots
+  slides.forEach((_,i)=>{
+    const d=document.createElement('div');
+    d.className='dot';
+    d.addEventListener('click',()=>goTo(i));
+    dotsEl.appendChild(d);
+  });
+  const dots=Array.from(dotsEl.children);
+
+  /*
+   * Transition types (cycle by fromIdx % 4)
+   * [exitFwd, enterFwd, exitBwd, enterBwd, enterDelay, settle]
+   * All durations in ms. settle must exceed enterDelay + enterDuration.
+   */
+  const EZ='cubic-bezier(.4,0,1,1)', EI='cubic-bezier(0,0,.2,1)', EB='cubic-bezier(.77,0,.175,1)';
+  const T=[
+    // 0: Depth dive
+    [`D_out .62s ${EZ} forwards`,`D_in .75s ${EI} forwards`,
+     `D_outB .62s ${EZ} forwards`,`D_inB .75s ${EI} forwards`,300,1150],
+    // 1: Y-flip
+    [`Y_out .75s ${EB} forwards`,`Y_in .75s ${EB} forwards`,
+     `Y_outB .75s ${EB} forwards`,`Y_inB .75s ${EB} forwards`,260,1100],
+    // 2: X-slide
+    [`X_out .68s ${EB} forwards`,`X_in .68s ${EB} forwards`,
+     `X_outB .68s ${EB} forwards`,`X_inB .68s ${EB} forwards`,240,1050],
+    // 3: Orbital
+    [`O_out .78s ${EZ} forwards`,`O_in .85s ${EI} forwards`,
+     `O_outB .78s ${EZ} forwards`,`O_inB .85s ${EI} forwards`,300,1200],
+  ];
+
+  function goTo(next){
+    if(busy||next===cur||next<0||next>=N)return;
+    busy=true;
+    const from=cur, fwd=next>from;
+    const [ef,ei,eb,ebb,delay,settle]=T[Math.min(from,next)%4];
+    const outAnim=fwd?ef:eb, inAnim=fwd?ei:ebb;
+
+    // Exit
+    slides[from].style.zIndex='5';
+    slides[from].style.animation=outAnim;
+
+    // Prepare enter (opacity:0 via inline overrides any CSS rule)
+    slides[next].style.opacity='0';
+    slides[next].style.animation='none';
+    slides[next].style.zIndex='10';
+    slides[next].classList.add('active');
+
+    // Start enter after delay (gives exit time to begin + browser to flush 'none')
+    setTimeout(()=>{ slides[next].style.animation=inAnim; }, delay);
+
+    // Settle: clean up all inline styles
+    setTimeout(()=>{
+      slides[from].classList.remove('active');
+      slides[from].style.cssText='opacity:0;';
+      slides[next].style.cssText='opacity:1;';
+      cur=next; busy=false; ui();
+    }, settle);
+
+    ui(next); // optimistic dot/counter update
+  }
+
+  function ui(i=cur){
+    dots.forEach((d,idx)=>d.classList.toggle('on',idx===i));
+    ctrEl.textContent=`${String(i+1).padStart(2,'0')} / ${String(N).padStart(2,'0')}`;
+    secEl.textContent=slides[i].dataset.s||'';
+    btnP.disabled=i===0;
+    btnN.disabled=i===N-1;
+  }
+
+  // Init first slide
+  slides[0].style.opacity='1';
+  slides[0].classList.add('active');
+  // Gentle fade-in on load
+  slides[0].style.animation=`D_in .9s ${EI} forwards`;
+  setTimeout(()=>{ slides[0].style.animation=''; }, 1000);
+
+  btnN.addEventListener('click',()=>goTo(cur+1));
+  btnP.addEventListener('click',()=>goTo(cur-1));
+
+  document.addEventListener('keydown',e=>{
+    if([' ','ArrowRight','ArrowDown'].includes(e.key)){e.preventDefault();goTo(cur+1);}
+    if(['ArrowLeft','ArrowUp'].includes(e.key)){e.preventDefault();goTo(cur-1);}
+  });
+
+  let tx=0;
+  document.addEventListener('touchstart',e=>{tx=e.touches[0].clientX;},{passive:true});
+  document.addEventListener('touchend',e=>{
+    const dx=e.changedTouches[0].clientX-tx;
+    if(Math.abs(dx)>50)dx<0?goTo(cur+1):goTo(cur-1);
+  });
+
+  ui();
+})();
+</script>
+</body>
+</html>
