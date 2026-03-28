@@ -432,72 +432,123 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(
 </div>
 </section>
 
-<!-- 12 スパイラル学習 -->
+<!-- 12 スパイラル学習 (DNA helix) -->
 <section class="slide" data-i="11" data-s="テスト">
 <div class="si">
   <p class="ey">学習サイクル</p>
-  <h2 class="t2" style="margin-bottom:14px;">スパイラルで積み重ね<br><span class="acc">完全定着</span>へ</h2>
-  <div style="width:100%;max-width:820px;display:flex;gap:22px;align-items:center;">
+  <h2 class="t2" style="margin-bottom:12px;">螺旋を登って<span class="acc">完全定着</span>へ</h2>
+  <div style="width:100%;max-width:860px;display:flex;gap:18px;align-items:center;">
 
-    <!-- 3D spiral diagram -->
-    <div style="flex-shrink:0;perspective:520px;">
-      <svg viewBox="0 0 268 562" xmlns="http://www.w3.org/2000/svg"
-           style="display:block;width:clamp(175px,32vw,248px);height:auto;
-                  transform:rotateX(14deg) rotateY(-3deg);transform-origin:50% 72%;
-                  filter:drop-shadow(0 10px 28px rgba(93,200,196,.16));">
+    <!-- DNA Helix diagram -->
+    <div style="flex-shrink:0;perspective:800px;">
+      <svg viewBox="0 0 560 602" xmlns="http://www.w3.org/2000/svg"
+           style="display:block;width:clamp(280px,50vw,490px);height:auto;
+                  transform:rotateX(5deg);transform-origin:50% 62%;
+                  filter:drop-shadow(0 14px 40px rgba(93,200,196,.22));">
         <defs>
-          <marker id="sp_arr" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
-            <polygon points="0 0, 7 4, 0 8" fill="rgba(93,200,196,.72)"/>
+          <!-- Glow filter applied to upper arcs and apex node -->
+          <filter id="sp_glow" x="-60%" y="-60%" width="220%" height="220%">
+            <feGaussianBlur stdDeviation="5" result="b"/>
+            <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+          <marker id="sp_arr" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+            <polygon points="0 0, 9 5, 0 10" fill="rgba(93,200,196,.84)"/>
           </marker>
         </defs>
 
-        <!-- S-curve connectors (progressive teal, bottom→top) -->
-        <path d="M 116,524 C 132,524 132,452 150,452" fill="none" stroke="rgba(93,200,196,.20)" stroke-width="1.6" marker-end="url(#sp_arr)"/>
-        <path d="M 150,452 C 132,452 132,380 116,380" fill="none" stroke="rgba(93,200,196,.28)" stroke-width="1.7" marker-end="url(#sp_arr)"/>
-        <path d="M 116,380 C 132,380 132,308 150,308" fill="none" stroke="rgba(93,200,196,.37)" stroke-width="1.8" marker-end="url(#sp_arr)"/>
-        <path d="M 150,308 C 132,308 132,236 116,236" fill="none" stroke="rgba(93,200,196,.47)" stroke-width="1.9" marker-end="url(#sp_arr)"/>
-        <path d="M 116,236 C 132,236 132,164 150,164" fill="none" stroke="rgba(93,200,196,.58)" stroke-width="2.0" marker-end="url(#sp_arr)"/>
-        <path d="M 150,164 C 132,164 132,92  116,92"  fill="none" stroke="rgba(93,200,196,.70)" stroke-width="2.1" marker-end="url(#sp_arr)"/>
-        <path d="M 61,70  C 61,44  134,44  134,52"    fill="none" stroke="rgba(93,200,196,.85)" stroke-width="2.2" marker-end="url(#sp_arr)"/>
+        <!-- ══ BACK ARCS — behind helix, dashed, dim
+             drawn first so front arcs render on top ══ -->
+        <!-- 2→3  R(390,490)→L(170,414) -->
+        <path d="M 390,490 C 350,408 210,408 170,414"
+              fill="none" stroke="rgba(93,200,196,.22)" stroke-width="2"   stroke-dasharray="6,4"/>
+        <!-- 4→5  R(390,338)→L(170,262) -->
+        <path d="M 390,338 C 350,256 210,256 170,262"
+              fill="none" stroke="rgba(93,200,196,.34)" stroke-width="2.3" stroke-dasharray="6,4"/>
+        <!-- 6→7  R(390,186)→L(170,110) -->
+        <path d="M 390,186 C 350,104 210,104 170,110"
+              fill="none" stroke="rgba(93,200,196,.50)" stroke-width="2.6" stroke-dasharray="6,4"/>
 
-        <!-- Node 1: 予習 (left, bottom) — very dim -->
-        <rect x="6" y="500" width="110" height="48" rx="10" fill="rgba(255,255,255,.03)" stroke="rgba(255,255,255,.10)" stroke-width="1"/>
-        <text x="61" y="518" text-anchor="middle" font-size="12" fill="rgba(240,240,245,.52)" font-family="'Noto Sans JP',sans-serif">予習</text>
-        <text x="61" y="533" text-anchor="middle" font-size="10" fill="rgba(240,240,245,.30)" font-family="'Noto Sans JP',sans-serif">（検定教科書）</text>
+        <!-- ══ FRONT ARCS — facing viewer, solid, ascending brightness ══ -->
+        <!-- 1→2  L(170,566)→R(390,490)  bulge DOWN = toward viewer -->
+        <path d="M 170,566 C 210,584 350,584 390,490"
+              fill="none" stroke="rgba(93,200,196,.32)" stroke-width="2.4" marker-end="url(#sp_arr)"/>
+        <!-- 3→4  L(170,414)→R(390,338) -->
+        <path d="M 170,414 C 210,432 350,432 390,338"
+              fill="none" stroke="rgba(93,200,196,.50)" stroke-width="2.8" marker-end="url(#sp_arr)"/>
+        <!-- 5→6  L(170,262)→R(390,186) -->
+        <path d="M 170,262 C 210,280 350,280 390,186"
+              fill="none" stroke="rgba(93,200,196,.70)" stroke-width="3.2" filter="url(#sp_glow)" marker-end="url(#sp_arr)"/>
+        <!-- 7→8  L(170,110)→apex(280,68) — final ascent, brightest -->
+        <path d="M 170,110 C 222,132 264,74 280,68"
+              fill="none" stroke="rgba(93,200,196,.90)" stroke-width="3.6" filter="url(#sp_glow)" marker-end="url(#sp_arr)"/>
 
-        <!-- Node 2: 小テスト (right) -->
-        <rect x="152" y="428" width="110" height="48" rx="10" fill="rgba(93,200,196,.05)" stroke="rgba(93,200,196,.18)" stroke-width="1"/>
-        <text x="207" y="446" text-anchor="middle" font-size="12" fill="rgba(93,200,196,.62)" font-family="'Noto Sans JP',sans-serif">小テスト</text>
-        <text x="207" y="461" text-anchor="middle" font-size="10" fill="rgba(93,200,196,.38)" font-family="'Noto Sans JP',sans-serif">（A・C の日）</text>
+        <!-- Apex halo -->
+        <ellipse cx="280" cy="40" rx="105" ry="52" fill="rgba(93,200,196,.07)" filter="url(#sp_glow)"/>
 
-        <!-- Node 3: FG演習 (left) -->
-        <rect x="6" y="356" width="110" height="48" rx="10" fill="rgba(255,255,255,.05)" stroke="rgba(255,255,255,.16)" stroke-width="1"/>
-        <text x="61" y="374" text-anchor="middle" font-size="12" fill="rgba(240,240,245,.66)" font-family="'Noto Sans JP',sans-serif">FG 演習</text>
-        <text x="61" y="389" text-anchor="middle" font-size="10" fill="rgba(240,240,245,.42)" font-family="'Noto Sans JP',sans-serif">（A の日）</text>
+        <!-- ══ NODES — drawn last, always on top ══ -->
 
-        <!-- Node 4: 思考力演習 (right) -->
-        <rect x="152" y="284" width="110" height="48" rx="10" fill="rgba(93,200,196,.09)" stroke="rgba(93,200,196,.28)" stroke-width="1"/>
-        <text x="207" y="302" text-anchor="middle" font-size="12" fill="rgba(93,200,196,.76)" font-family="'Noto Sans JP',sans-serif">思考力演習</text>
-        <text x="207" y="317" text-anchor="middle" font-size="10" fill="rgba(93,200,196,.50)" font-family="'Noto Sans JP',sans-serif">（B の日）</text>
+        <!-- 1: 予習 (Left, bottom) — very dim -->
+        <rect x="10" y="534" width="160" height="64" rx="12"
+              fill="rgba(255,255,255,.03)" stroke="rgba(255,255,255,.09)" stroke-width="1"/>
+        <text x="90" y="558" text-anchor="middle" font-size="15"
+              fill="rgba(240,240,245,.48)" font-family="'Noto Sans JP',sans-serif">予習</text>
+        <text x="90" y="576" text-anchor="middle" font-size="12"
+              fill="rgba(240,240,245,.26)" font-family="'Noto Sans JP',sans-serif">検定教科書</text>
 
-        <!-- Node 5: 単元テスト (left) -->
-        <rect x="6" y="212" width="110" height="48" rx="10" fill="rgba(255,255,255,.07)" stroke="rgba(255,255,255,.22)" stroke-width="1.1"/>
-        <text x="61" y="230" text-anchor="middle" font-size="12" fill="rgba(240,240,245,.80)" font-family="'Noto Sans JP',sans-serif">単元テスト</text>
-        <text x="61" y="245" text-anchor="middle" font-size="10" fill="rgba(240,240,245,.52)" font-family="'Noto Sans JP',sans-serif">（C の日）</text>
+        <!-- 2: 小テスト (Right) -->
+        <rect x="390" y="458" width="160" height="64" rx="12"
+              fill="rgba(93,200,196,.06)" stroke="rgba(93,200,196,.18)" stroke-width="1"/>
+        <text x="470" y="482" text-anchor="middle" font-size="15"
+              fill="rgba(93,200,196,.62)" font-family="'Noto Sans JP',sans-serif">小テスト</text>
+        <text x="470" y="500" text-anchor="middle" font-size="12"
+              fill="rgba(93,200,196,.38)" font-family="'Noto Sans JP',sans-serif">A・C の日</text>
 
-        <!-- Node 6: 追試・直し (right) -->
-        <rect x="152" y="140" width="110" height="48" rx="10" fill="rgba(93,200,196,.13)" stroke="rgba(93,200,196,.38)" stroke-width="1.2"/>
-        <text x="207" y="158" text-anchor="middle" font-size="11.5" fill="rgba(93,200,196,.88)" font-family="'Noto Sans JP',sans-serif">追試・直しレポート</text>
-        <text x="207" y="173" text-anchor="middle" font-size="10" fill="rgba(93,200,196,.60)" font-family="'Noto Sans JP',sans-serif">穴をふさぐ</text>
+        <!-- 3: FG演習 (Left) -->
+        <rect x="10" y="382" width="160" height="64" rx="12"
+              fill="rgba(255,255,255,.05)" stroke="rgba(255,255,255,.15)" stroke-width="1"/>
+        <text x="90" y="406" text-anchor="middle" font-size="15"
+              fill="rgba(240,240,245,.64)" font-family="'Noto Sans JP',sans-serif">FG 演習</text>
+        <text x="90" y="424" text-anchor="middle" font-size="12"
+              fill="rgba(240,240,245,.40)" font-family="'Noto Sans JP',sans-serif">A の日</text>
 
-        <!-- Node 7: 考査 (left) -->
-        <rect x="6" y="68" width="110" height="48" rx="10" fill="rgba(93,200,196,.20)" stroke="rgba(93,200,196,.54)" stroke-width="1.4"/>
-        <text x="61" y="86" text-anchor="middle" font-size="12" fill="rgba(93,200,196,.94)" font-family="'Noto Sans JP',sans-serif">考査</text>
-        <text x="61" y="101" text-anchor="middle" font-size="10" fill="rgba(93,200,196,.66)" font-family="'Noto Sans JP',sans-serif">（定期考査）</text>
+        <!-- 4: 思考力演習 (Right) -->
+        <rect x="390" y="306" width="160" height="64" rx="12"
+              fill="rgba(93,200,196,.09)" stroke="rgba(93,200,196,.26)" stroke-width="1.2"/>
+        <text x="470" y="330" text-anchor="middle" font-size="15"
+              fill="rgba(93,200,196,.76)" font-family="'Noto Sans JP',sans-serif">思考力演習</text>
+        <text x="470" y="348" text-anchor="middle" font-size="12"
+              fill="rgba(93,200,196,.50)" font-family="'Noto Sans JP',sans-serif">B の日</text>
 
-        <!-- Node 8: 完全定着 (center, apex — glowing) -->
-        <rect x="79" y="8" width="110" height="42" rx="12" fill="rgba(93,200,196,.30)" stroke="rgba(93,200,196,.88)" stroke-width="2"/>
-        <text x="134" y="34" text-anchor="middle" font-size="13" fill="#5dc8c4" font-weight="700" font-family="'Noto Sans JP',sans-serif">完全定着</text>
+        <!-- 5: 単元テスト (Left) -->
+        <rect x="10" y="230" width="160" height="64" rx="12"
+              fill="rgba(255,255,255,.07)" stroke="rgba(255,255,255,.20)" stroke-width="1.4"/>
+        <text x="90" y="254" text-anchor="middle" font-size="15"
+              fill="rgba(240,240,245,.78)" font-family="'Noto Sans JP',sans-serif">単元テスト</text>
+        <text x="90" y="272" text-anchor="middle" font-size="12"
+              fill="rgba(240,240,245,.50)" font-family="'Noto Sans JP',sans-serif">C の日</text>
+
+        <!-- 6: 追試・直し (Right) -->
+        <rect x="390" y="154" width="160" height="64" rx="12"
+              fill="rgba(93,200,196,.13)" stroke="rgba(93,200,196,.36)" stroke-width="1.6"/>
+        <text x="470" y="178" text-anchor="middle" font-size="15"
+              fill="rgba(93,200,196,.88)" font-family="'Noto Sans JP',sans-serif">追試・直し</text>
+        <text x="470" y="196" text-anchor="middle" font-size="12"
+              fill="rgba(93,200,196,.60)" font-family="'Noto Sans JP',sans-serif">レポート作成</text>
+
+        <!-- 7: 考査 (Left) -->
+        <rect x="10" y="78" width="160" height="64" rx="12"
+              fill="rgba(93,200,196,.20)" stroke="rgba(93,200,196,.54)" stroke-width="1.8"/>
+        <text x="90" y="102" text-anchor="middle" font-size="15"
+              fill="rgba(93,200,196,.94)" font-family="'Noto Sans JP',sans-serif">考査</text>
+        <text x="90" y="120" text-anchor="middle" font-size="12"
+              fill="rgba(93,200,196,.66)" font-family="'Noto Sans JP',sans-serif">定期考査</text>
+
+        <!-- 8: 完全定着 (Center, apex — glowing crown) -->
+        <rect x="160" y="12" width="240" height="56" rx="16"
+              fill="rgba(93,200,196,.30)" stroke="rgba(93,200,196,.90)" stroke-width="2.2"
+              filter="url(#sp_glow)"/>
+        <text x="280" y="47" text-anchor="middle" font-size="20"
+              fill="#5dc8c4" font-weight="700" font-family="'Noto Sans JP',sans-serif">完全定着</text>
       </svg>
     </div>
 
