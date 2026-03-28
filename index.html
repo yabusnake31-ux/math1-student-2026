@@ -451,8 +451,9 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(
             <feGaussianBlur stdDeviation="5" result="b"/>
             <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
           </filter>
-          <marker id="sp_arr" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
-            <polygon points="0 0, 9 5, 0 10" fill="rgba(93,200,196,.84)"/>
+          <!-- markerUnits="userSpaceOnUse" → fixed size regardless of stroke-width -->
+          <marker id="sp_arr" markerWidth="14" markerHeight="11" refX="13" refY="5.5" orient="auto" markerUnits="userSpaceOnUse">
+            <polygon points="0 0, 13 5.5, 0 11" fill="rgba(93,200,196,.84)"/>
           </marker>
         </defs>
 
@@ -499,9 +500,9 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(
         <rect x="390" y="458" width="160" height="64" rx="12"
               fill="rgba(93,200,196,.06)" stroke="rgba(93,200,196,.18)" stroke-width="1"/>
         <text x="470" y="482" text-anchor="middle" font-size="15"
-              fill="rgba(93,200,196,.62)" font-family="'Noto Sans JP',sans-serif">小テスト</text>
+              fill="rgba(93,200,196,.62)" font-family="'Noto Sans JP',sans-serif">確認テスト</text>
         <text x="470" y="500" text-anchor="middle" font-size="12"
-              fill="rgba(93,200,196,.38)" font-family="'Noto Sans JP',sans-serif">A・C の日</text>
+              fill="rgba(93,200,196,.38)" font-family="'Noto Sans JP',sans-serif">A の日</text>
 
         <!-- 3: FG演習 (Left) -->
         <rect x="10" y="382" width="160" height="64" rx="12"
@@ -522,8 +523,8 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(
         <!-- 5: 単元テスト (Left) -->
         <rect x="10" y="230" width="160" height="64" rx="12"
               fill="rgba(255,255,255,.07)" stroke="rgba(255,255,255,.20)" stroke-width="1.4"/>
-        <text x="90" y="254" text-anchor="middle" font-size="15"
-              fill="rgba(240,240,245,.78)" font-family="'Noto Sans JP',sans-serif">単元テスト</text>
+        <text x="90" y="254" text-anchor="middle" font-size="14"
+              fill="rgba(240,240,245,.78)" font-family="'Noto Sans JP',sans-serif">単元確認テスト</text>
         <text x="90" y="272" text-anchor="middle" font-size="12"
               fill="rgba(240,240,245,.50)" font-family="'Noto Sans JP',sans-serif">C の日</text>
 
@@ -539,9 +540,9 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(
         <rect x="10" y="78" width="160" height="64" rx="12"
               fill="rgba(93,200,196,.20)" stroke="rgba(93,200,196,.54)" stroke-width="1.8"/>
         <text x="90" y="102" text-anchor="middle" font-size="15"
-              fill="rgba(93,200,196,.94)" font-family="'Noto Sans JP',sans-serif">考査</text>
+              fill="rgba(93,200,196,.94)" font-family="'Noto Sans JP',sans-serif">小テスト・考査</text>
         <text x="90" y="120" text-anchor="middle" font-size="12"
-              fill="rgba(93,200,196,.66)" font-family="'Noto Sans JP',sans-serif">定期考査</text>
+              fill="rgba(93,200,196,.66)" font-family="'Noto Sans JP',sans-serif">本番形式・実力確認</text>
 
         <!-- 8: 完全定着 (Center, apex — glowing crown) -->
         <rect x="160" y="12" width="240" height="56" rx="16"
@@ -562,10 +563,10 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(
         <p class="bold" style="margin-bottom:5px;font-size:.8rem;">各ステップの役割</p>
         <p class="body" style="font-size:.72rem;line-height:1.78;">
           <span class="acc bold">予習</span>　教科書で概念をつかむ<br>
-          <span class="acc bold">小テスト</span>　授業前の記憶確認<br>
+          <span class="acc bold">確認テスト(A)</span>　授業冒頭の記憶確認<br>
           <span class="acc bold">FG演習(A)</span>　解法を自力で再現<br>
           <span class="acc bold">思考力(B)</span>　応用・思考力を養う<br>
-          <span class="acc bold">単元テスト(C)</span>　単元全体を確認<br>
+          <span class="acc bold">単元確認テスト(C)</span>　単元全体を確認<br>
           <span class="acc bold">追試・直し</span>　穴をふさいで次へ<br>
           <span class="acc bold">考査</span>　学期の総仕上げ
         </p>
