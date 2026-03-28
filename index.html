@@ -689,6 +689,11 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(
 (function(){
   const cv = document.getElementById('bg');
   const cx = cv.getContext('2d');
+  // ── 調整できる定数 ──────────────────────────
+  const ROTATION_SPEED = 0.00015; // 星座の回転速度（大きくすると速い。目安: 0.00002〜0.0002）
+  const SHOOT_MIN = 4000;          // 流星の最短間隔（ミリ秒）
+  const SHOOT_MAX = 4000;          // 流星の間隔のランダム幅（この値を足したものが最長間隔）
+  // ────────────────────────────────────────────
   let W, H, stars=[], edges=[], shooters=[], gAngle=0, nextShoot=9000;
   const mouse={x:-1,y:-1};
 
@@ -754,7 +759,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(
 
     // shooting star
     if(t>nextShoot){
-      nextShoot=t+8000+Math.random()*9000;
+      nextShoot=t+SHOOT_MIN+Math.random()*SHOOT_MAX;
       const ang=.18+Math.random()*.32;
       const sp=9+Math.random()*7;
       shooters.push({x:Math.random()*W*.75+W*.05,y:Math.random()*H*.2,
@@ -772,7 +777,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(
       s.x+=s.vx;s.y+=s.vy;s.life-=.022;
     }
 
-    gAngle+=.000038;
+    gAngle+=ROTATION_SPEED;
     requestAnimationFrame(draw);
   }
 
